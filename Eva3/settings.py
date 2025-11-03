@@ -57,13 +57,12 @@ WSGI_APPLICATION = 'Eva3.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+   'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'reservas_hotel',
-        'USER':'root',
-        'PASSWORD':'',
-        'PORT':3306,
-
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'PORT': os.getenv('DB_PORT')
     }
 }
 
