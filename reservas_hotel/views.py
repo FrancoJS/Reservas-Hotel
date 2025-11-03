@@ -32,7 +32,7 @@ def iniciar_sesion(request):
 
                 return render(request, 'menu-admin.html', datos)
             else:
-                return render(request, '', datos)
+                return render(request, 'menu-operador.html', datos)
         else:
             datos = {'error': '¡El usuario o la contraseña son incorrectos!'}
             return render(request, 'login.html', datos)
