@@ -118,4 +118,25 @@ def registrarReserva(request):
             }
             return render(request, 'operador-crear.html', datos)
 
+def listarReserva(request):
+    estado_sesion = request.session['estado_sesion']
+    if estado_sesion is True:
+        if request.session['nombre_usuario'] != 'ADMIN':
+            lista = Reserva.objects.all()
+            datos = {
+                'nombre_usuario': request.session['nombre_usuario'].upper(),
+                'lista': lista
+            }
+            return render(request, 'operador-listado.html', datos)
+        else:
+            datos = {
+                'r2': '¡No cuenta con los permisos necesarios!'
+            }
+            return render(request, 'login.html', datos)
+    else:
+        datos = {
+            'r2': '¡No se puede procesar la solicitud!'
+
+        }
+        return render(request, 'login.html', datos)
 
