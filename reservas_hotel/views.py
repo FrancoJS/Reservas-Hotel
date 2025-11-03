@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reservas_hotel.models import Usuario, Historial
+from reservas_hotel.models import Usuario, Historial, Reserva, Cliente, Habitacion
 from datetime import datetime
 
 
@@ -72,3 +72,50 @@ def mostrar_historial(request):
     except:
         datos = {'error': '¡No se puede procesar la solicitud!'}
         return render(request, 'login.html', datos)
+
+def mostrar_operador(request):
+    datos = {'nombre_usuario': request.session['nombre_usuario'].upper()}
+    return render(request, 'menu-operador.html', datos)
+
+def mostrar_registrar(request):
+    opcionesClientes = Cliente.objects.all().order_by("nombre")
+    opcionesHabitaciones = Habitacion.objects.all().order_by("tipo")
+    datos = {
+            'opcionesClientes': opcionesClientes,
+            'opcionesHabitaciones': opcionesHabitaciones,
+
+    }
+    return render(request, 'operador-crear.html', datos)
+
+
+def registrarReserva(request):
+    if request.method == 'POST':
+        cli = request.POST['cbocli']
+        hab = request.POST['cbohab']
+        fec = request.POST['txtfec']
+        mon = request.POST['txtmon']
+
+        comprobarReserva = Reserva.objects.filter(cliente_id=cli, fecha_reserva=fec)
+        if comprobarReserva:
+            opcionesClientes = Cliente.objects.all().order_by("nombre")
+            opcionesHabitaciones = Habitacion.objects.all().order_by("tipo")
+            datos = {
+                'opcionesClientes': opcionesClientes,
+                'opcionesHabitaciones': opcionesHabitaciones,
+                'r2': 'El cliente seleccionado ya tiene una reserva para esa fecha!'
+            }
+            return render(request, 'operador-crear.html', datos)
+        else:
+            nueva = Reserva(cliente_id=cli, habitacion_id=hab, fecha_reserva=fec, monto=mon)
+            nueva.save()
+
+            opcionesClientes = Cliente.objects.all().order_by("nombre")
+            opcionesHabitaciones = Habitacion.objects.all().order_by("tipo")
+            datos = {
+                'opcionesClientes': opcionesClientes,
+                'opcionesHabitaciones': opcionesHabitaciones,
+                'r': 'Reserva registrada correctamente!'
+            }
+            return render(request, 'operador-crear.html', datos)
+
+
