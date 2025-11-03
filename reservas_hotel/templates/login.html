@@ -31,13 +31,16 @@
 	<body>
 		<header class="navbar navbar-dark">
 			<div class="container d-flex flex-wrap justify-content-between align-items-center">
-				<a class="navbar-brand" href="login.html"><i class="bi bi-grid-1x2"></i> Sistema de Gestión</a>
+				<a class="navbar-brand" href="login.html"><i class="bi bi-grid-1x2"></i> Sistema de Reservas de Hotel</a>
 			</div>
 		</header>
 		<main class="container py-4">
 			<div class="row justify-content-center py-5">
 				<div class="col-12 col-md-7 col-lg-5 col-xxl-4">
-					<div class="card card-ghost">
+					{% if error %}
+					<div class="alert alert-danger" role="alert">{{ error }}</div>
+					{% endif %}
+					<div class="card">
 						<div class="card-header bg-white">
 							<h5 class="mb-0"><i class="bi bi-box-arrow-in-right me-1"></i> Iniciar sesión</h5>
 						</div>
@@ -62,6 +65,5 @@
 				</div>
 			</div>
 		</main>
-		<footer class="py-4 text-center brand-footer small">© 2025 — Tu Empresa</footer>
 	</body>
 </html>
