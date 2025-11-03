@@ -11,5 +11,6 @@ urlpatterns = [
     path('mostrar_historial', views.mostrar_historial),
     path('mostrar_registrar', views.mostrar_registrar),
     path('mostrar_operador', views.mostrar_operador),
-    path('operador-crear/', views.registrarReserva)
+    path('operador-crear/', views.registrarReserva),
+    path('operador-listado/', views.listarReserva)
 ]

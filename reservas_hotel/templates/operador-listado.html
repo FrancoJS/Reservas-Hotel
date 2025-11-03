@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es" data-bs-theme="light">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,16 +8,31 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
-    :root{ --brand-primary:#0d6efd; --brand-dark:#212529; }
-    .navbar{ background: var(--brand-dark); }
-    .card-ghost{ border: 1px solid rgba(0,0,0,.05); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
-    .brand-footer{ color: #6c757d; }
+    :root {
+      --brand-primary: #0d6efd;
+      --brand-dark: #212529;
+    }
+
+    .navbar {
+      background: var(--brand-dark);
+    }
+
+    .card-ghost {
+      border: 1px solid rgba(0, 0, 0, .05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+    }
+
+    .brand-footer {
+      color: #6c757d;
+    }
   </style>
 </head>
+
 <body>
   <header class="navbar navbar-dark">
     <div class="container d-flex justify-content-between align-items-center">
-      <a class="navbar-brand" href="reservas-listado.html"><i class="bi bi-building"></i> Sistema de Reservas de Hotel</a>
+      <a class="navbar-brand" href="reservas-listado.html"><i class="bi bi-building"></i> Sistema de Reservas de
+        Hotel</a>
     </div>
   </header>
 
@@ -25,8 +41,10 @@
       <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="bi bi-journal-text me-1"></i> Listado de Reservas</h5>
         <div class="d-flex gap-2">
-          <a class="btn btn-primary btn-sm" href="reservas-crear.html"><i class="bi bi-plus-circle"></i> Nueva reserva</a>
-          <a class="btn btn-outline-primary btn-sm" href="reservas-listado.html"><i class="bi bi-arrow-repeat"></i> Refrescar</a>
+          <a class="btn btn-primary btn-sm" href="reservas-crear.html"><i class="bi bi-plus-circle"></i> Nueva
+            reserva</a>
+          <a class="btn btn-outline-primary btn-sm" href="reservas-listado.html"><i class="bi bi-arrow-repeat"></i>
+            Refrescar</a>
         </div>
       </div>
 
@@ -59,28 +77,20 @@
               </tr>
             </thead>
             <tbody>
+              {% for l in lista %}
               <tr>
-                <td>1</td>
-                <td>Juan Pérez</td>
-                <td>Suite Doble</td>
-                <td>2025-11-10</td>
-                <td>$180.000</td>
+                <td>{{ l.id }}</td>
+                <td>{{ l.cliente.nombre }}</td>
+                <td>{{ l.habitacion.tipo }}</td>
+                <td>{{ l.fecha_reserva}}</td>
+                <td>{{ l.monto }}</td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-primary" href="reservas-editar.html"><i class="bi bi-pencil"></i></a>
-                  <a class="btn btn-sm btn-outline-danger" href="reservas-eliminar.html"><i class="bi bi-trash3"></i></a>
+                  <a class="btn btn-sm btn-outline-danger" href="reservas-eliminar.html"><i
+                      class="bi bi-trash3"></i></a>
                 </td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Carla Muñoz</td>
-                <td>Habitación Simple</td>
-                <td>2025-11-12</td>
-                <td>$90.000</td>
-                <td class="text-end">
-                  <a class="btn btn-sm btn-outline-primary" href="reservas-editar.html"><i class="bi bi-pencil"></i></a>
-                  <a class="btn btn-sm btn-outline-danger" href="reservas-eliminar.html"><i class="bi bi-trash3"></i></a>
-                </td>
-              </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -99,4 +109,5 @@
   </main>
   <footer class="py-4 text-center brand-footer small">© 2025 — Tu Hotel</footer>
 </body>
+
 </html>
