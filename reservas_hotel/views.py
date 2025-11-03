@@ -11,14 +11,15 @@ def iniciar_sesion(request):
         nombre_usuario = request.POST['username']
         password = request.POST['password']
 
-        usuario = Usuario.objects.filter(nombre=nombre_usuario, password=password).first()
+        usuario = Usuario.objects.filter(nombre=nombre_usuario, password=password).values()
+        print(usuario)
 
         if usuario:
             request.session['estado_sesion'] = True
             request.session['nombre_usuario'] = nombre_usuario.upper()
-            request.session['id_usuario'] = usuario.id[0]['id']
+            request.session['id_usuario'] = usuario[0]['id']
 
-            datos = {'nombre_usurio': nombre_usuario.upper()}
+            datos = {'nombre_usuario': nombre_usuario.upper()}
 
             if nombre_usuario == 'admin':
                 return render(request, 'admin-historial.html', datos)
@@ -29,4 +30,14 @@ def iniciar_sesion(request):
             return render(request, 'login.html', datos)
     else:
         datos = {'error': '¡No se puede procesar la solicitud!'}
+        return render(request, 'login.html')
+
+def cerrar_sesion(request):
+    try:
+        del request.session['estado_sesion']
+        del request.session['nombre_usuario']
+        del request.session['id_usuario']
+
+        return render(request, 'login.html')
+    except:
         return render(request, 'login.html')
