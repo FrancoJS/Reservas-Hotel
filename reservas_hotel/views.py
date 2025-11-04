@@ -9,8 +9,8 @@ def mostrar_login(request):
 
 def iniciar_sesion(request):
     if request.method == 'POST':
-        nombre_usuario = request.POST['username']
-        password = request.POST['password']
+        nombre_usuario = request.POST['username'].strip()
+        password = request.POST['password'].strip()
 
         usuario = Usuario.objects.filter(nombre=nombre_usuario, password=password).values()
 
@@ -58,6 +58,14 @@ def cerrar_sesion(request):
         return render(request, 'login.html')
 
 
+def mostrar_admin(request):
+    if request.session['nombre_usuario'] == 'ADMIN':
+        datos = {'nombre_usuario': request.session['nombre_usuario']}
+        return render(request, 'menu-admin.html', datos)
+    else:
+        datos = {'error': '¡No cuenta con los permisos necesarios!'}
+        return render(request, 'login.html', datos)
+
 def mostrar_historial(request):
     try:
         estado_sesion = request.session['estado_sesion']
@@ -74,7 +82,7 @@ def mostrar_historial(request):
         return render(request, 'login.html', datos)
 
 def mostrar_operador(request):
-    datos = {'nombre_usuario': request.session['nombre_usuario'].upper()}
+    datos = {'nombre_usuario': request.session['nombre_usuario']}
     return render(request, 'menu-operador.html', datos)
 
 def mostrar_registrar(request):
@@ -133,16 +141,16 @@ def listarReserva(request):
             habitaciones = Habitacion.objects.all().order_by("tipo")
             clientes = Cliente.objects.all().order_by("nombre")
 
-            nombre_cliente = request.GET.get('cliente', '')
-            Habitacion_id = request.GET.get('habitacion', '')
+            cliente_id = request.GET.get('cliente', '')
+            habitacion_id = request.GET.get('habitacion', '')
             fecha_reserva = request.GET.get('fecha', '')
 
-            if nombre_cliente:
-                lista = lista.filter(cliente_id=nombre_cliente)
-            if Habitacion_id:
-                lista = lista.filter(habitacion_id=Habitacion_id)
+            if cliente_id:
+                lista = lista.filter(cliente_id=cliente_id)
+            if habitacion_id:
+                lista = lista.filter(habitacion_id=habitacion_id)
             if fecha_reserva:
-                lista = lista.filter(fecha_reserva__icontains=fecha_reserva)
+                lista = lista.filter(fecha_reserva__date=fecha_reserva)
 
             datos = {
                 'nombre_usuario': request.session['nombre_usuario'].upper(),
@@ -153,16 +161,16 @@ def listarReserva(request):
             return render(request, 'operador-listado.html', datos)
         else:
             datos = {
-                'r2': '¡No cuenta con los permisos necesarios!'
+                'error': '¡No cuenta con los permisos necesarios!'
             }
             return render(request, 'login.html', datos)
     else:
         datos = {
-            'r2': '¡No se puede procesar la solicitud!'
+            'error': '¡No se puede procesar la solicitud!'
 
         }
         return render(request, 'login.html', datos)
-    
+
 
 def mostrar_editar(request, id):
     try:
@@ -219,7 +227,7 @@ def mostrar_editar(request, id):
             datos = {'r2': '¡No se puede procesar la solicitud!'}
             return render(request, 'login.html', datos)
 
-    except Reserva.DoesNotExist:
+    except :
         datos = {'r2': f"El ID ({id}) No existe. Imposible editar!!"}
         return render(request, 'operador-editar.html', datos)
 
@@ -240,17 +248,17 @@ def eliminarReserva(request, id):
         historial = Historial(usuario_id=usuario, descripcion=descripcion, tabla_afectada=tabla_afectada, fecha=fecha)
         historial.save()
 
-        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("fecha_reserva")
+        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("id")
         datos = {
-            'reservas': reservas,
+            'lista': reservas,
             'r': f"Reserva: {referencia} eliminada correctamente!"
         }
-        return render(request, 'operador-eliminar.html', datos)
+        return render(request, 'operador-listado.html', datos)
 
-    except Reserva.DoesNotExist:
-        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("fecha_reserva")
+    except:
+        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("id")
         datos = {
-            'reservas': reservas,
+            'lista': reservas,
             'r2': f"El ID ({id}) No Existe. Imposible Eliminar!!"
         }
-        return render(request, 'operador-eliminar.html', datos)
+        return render(request, 'operador-listado.html', datos)
