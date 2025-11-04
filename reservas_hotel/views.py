@@ -122,10 +122,26 @@ def listarReserva(request):
     estado_sesion = request.session['estado_sesion']
     if estado_sesion is True:
         if request.session['nombre_usuario'] != 'ADMIN':
-            lista = Reserva.objects.all()
+            lista = Reserva.objects.select_related("cliente", "habitacion").order_by("id")
+            habitaciones = Habitacion.objects.all().order_by("tipo")
+            clientes = Cliente.objects.all().order_by("nombre")
+
+            nombre_cliente = request.GET.get('cliente', '')
+            Habitacion_id = request.GET.get('habitacion', '')
+            fecha_reserva = request.GET.get('fecha', '')
+
+            if nombre_cliente:
+                lista = lista.filter(cliente_id=nombre_cliente)
+            if Habitacion_id:
+                lista = lista.filter(habitacion_id=Habitacion_id)
+            if fecha_reserva:
+                lista = lista.filter(fecha_reserva__icontains=fecha_reserva)
+
             datos = {
                 'nombre_usuario': request.session['nombre_usuario'].upper(),
-                'lista': lista
+                'lista': lista,
+                'habitaciones': habitaciones,
+                'clientes': clientes
             }
             return render(request, 'operador-listado.html', datos)
         else:
