@@ -57,20 +57,46 @@
       </div>
 
       <div class="card-body">
-        <form class="row gy-2 gx-3 align-items-end mb-3">
+        <form method="GET" action="/operador-listado/" class="row gy-2 gx-3 align-items-end mb-3">
           <div class="col-sm-6 col-md-4">
             <label class="form-label">Cliente</label>
-            <input type="text" class="form-control" placeholder="Nombre del cliente..." />
+            <select name="cliente" class="form-select">
+              <option value="">Seleccione cliente</option>
+              {% for c in clientes %}
+                <option value="{{ c.id }}" {% if request.GET.cliente == c.id|stringformat:"s" %}selected{% endif %}>
+                  {{ c.nombre }}
+                </option>
+              {% endfor %}
+            </select>
           </div>
+
           <div class="col-sm-6 col-md-4">
             <label class="form-label">Habitación</label>
-            <input type="text" class="form-control" placeholder="Tipo o número..." />
+            <select name="habitacion" class="form-select">
+              <option value="">Seleccione habitación</option>
+              {% for h in habitaciones %}
+                <option value="{{ h.id }}" {% if request.GET.habitacion == h.id|stringformat:"s" %}selected{% endif %}>
+                  {{ h.tipo }}
+                </option>
+              {% endfor %}
+            </select>
           </div>
+
           <div class="col-sm-6 col-md-4">
             <label class="form-label">Fecha de reserva</label>
-            <input type="date" class="form-control" />
+            <input type="date" name="fecha" class="form-control" value="{{ request.GET.fecha }}">
+          </div>
+
+          <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="bi bi-search"></i> Filtrar
+            </button>
+            <a href="/operador-listado/" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-x-circle"></i> Limpiar
+            </a>
           </div>
         </form>
+
 
         <div class="table-responsive border rounded">
           <table class="table align-middle table-hover mb-0">
