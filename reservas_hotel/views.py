@@ -139,4 +139,28 @@ def listarReserva(request):
 
         }
         return render(request, 'login.html', datos)
+    
+def eliminarReserva(request, id):
+    try:
+        res = Reserva.objects.get(id=id)
+        cliente = res.cliente.nombre
+        habitacion = res.habitacion.tipo
+        fecha = res.fecha_reserva
+        referencia = f"{cliente} - {habitacion}"
 
+        res.delete()
+
+        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("fecha_reserva")
+        datos = {
+            'reservas': reservas,
+            'r': f"Reserva: {referencia} eliminada correctamente!"
+        }
+        return render(request, 'operador-eliminar.html', datos)
+
+    except Reserva.DoesNotExist:
+        reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("fecha_reserva")
+        datos = {
+            'reservas': reservas,
+            'r2': f"El ID ({id}) No Existe. Imposible Eliminar!!"
+        }
+        return render(request, 'operador-eliminar.html', datos)

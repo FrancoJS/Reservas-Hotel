@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es" data-bs-theme="light">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,31 +8,58 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
-    :root{ --brand-dark:#212529; }
-    .navbar{ background: var(--brand-dark); }
-    .card-ghost{ border: 1px solid rgba(0,0,0,.05); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
-    .brand-footer{ color: #6c757d; }
+    :root {
+      --brand-dark: #212529;
+    }
+
+    .navbar {
+      background: var(--brand-dark);
+    }
+
+    .card-ghost {
+      border: 1px solid rgba(0, 0, 0, .05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+    }
+
+    .brand-footer {
+      color: #6c757d;
+    }
   </style>
 </head>
+
 <body>
   <header class="navbar navbar-dark">
-    <div class="container"><a class="navbar-brand" href="reservas-listado.html"><i class="bi bi-building"></i> Sistema de Reservas</a></div>
+    <div class="container"><a class="navbar-brand" href="reservas-listado.html"><i class="bi bi-building"></i> Sistema
+        de Reservas</a></div>
   </header>
   <main class="container py-4">
     <div class="card card-ghost">
-      <div class="card-header bg-white"><h5 class="mb-0 text-danger"><i class="bi bi-trash3 me-1"></i> Eliminar Reserva</h5></div>
-      <div class="card-body">
-        <p>¿Desea eliminar la reserva de <strong>Juan Pérez</strong> (Suite Doble, fecha 2025-11-10)?</p>
-        <div class="alert alert-warning small">
-          <i class="bi bi-exclamation-triangle me-1"></i> Esta acción eliminará el registro de la tabla <strong>Reservas</strong>.
-        </div>
-        <div class="d-flex gap-2 mt-3">
-          <a class="btn btn-outline-secondary" href="reservas-listado.html">Cancelar</a>
-          <a class="btn btn-danger" href="reservas-listado.html">Eliminar</a>
-        </div>
+      <div class="card-header bg-white">
+        <h5 class="mb-0 text-danger"><i class="bi bi-trash3 me-1"></i> Eliminar Reserva</h5>
       </div>
+      <div class="card-body">
+        {% if r %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <h5>{{ r }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if r2 %}
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						<h5>{{ r2 }}</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+				{% endif %}  
+
+      </div>
+      <div class="d-flex gap-2 mt-4">
+					<a href="/operador-listado/" class="btn btn-outline-secondary">Volver</a>
+				</div>
+    </div>
     </div>
   </main>
   <footer class="py-4 text-center brand-footer small">© 2025 — Tu Hotel</footer>
 </body>
+
 </html>
