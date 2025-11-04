@@ -156,6 +156,71 @@ def listarReserva(request):
         }
         return render(request, 'login.html', datos)
     
+
+def mostrar_editar(request, id):
+    try:
+        estado_sesion = request.session['estado_sesion']
+        if estado_sesion is True:
+            reserva = Reserva.objects.get(id=id)
+            opcionesClientes = Cliente.objects.all().order_by("nombre")
+            opcionesHabitaciones = Habitacion.objects.all().order_by("tipo")
+
+            if request.method == 'POST':
+                cli = request.POST['cbocli']
+                hab = request.POST['cbohab']
+                fec = request.POST['txtfec']
+                mon = request.POST['txtmon']
+
+                comprobarReserva = Reserva.objects.filter(cliente_id=cli, fecha_reserva=fec).exclude(id=id)
+                if comprobarReserva:
+                    datos = {
+                        'reserva': reserva,
+                        'opcionesClientes': opcionesClientes,
+                        'opcionesHabitaciones': opcionesHabitaciones,
+                        'r2': 'El cliente seleccionado ya tiene una reserva para esa fecha!'
+                    }
+                    return render(request, 'operador-editar.html', datos)
+                else:
+                    reserva.cliente_id = cli
+                    reserva.habitacion_id = hab
+                    reserva.fecha_reserva = fec
+                    reserva.monto = mon
+                    reserva.save()
+
+                    descripcion = "Editar Reserva"
+                    tabla_afectada = "Reserva"
+                    fecha = datetime.now()
+                    usuario_id = request.session['id_usuario']
+                    historial = Historial(
+                        usuario_id=usuario_id,
+                        descripcion=descripcion,
+                        tabla_afectada=tabla_afectada,
+                        fecha=fecha
+                    )
+                    historial.save()
+
+                    datos = {
+                        'reserva': reserva,
+                        'opcionesClientes': opcionesClientes,
+                        'opcionesHabitaciones': opcionesHabitaciones,
+                        'r': 'Reserva actualizada correctamente!'
+                    }
+                    return render(request, 'operador-editar.html', datos)
+            else:
+                datos = {
+                    'reserva': reserva,
+                    'opcionesClientes': opcionesClientes,
+                    'opcionesHabitaciones': opcionesHabitaciones
+                }
+                return render(request, 'operador-editar.html', datos)
+        else:
+            datos = {'r2': '¡No se puede procesar la solicitud!'}
+            return render(request, 'login.html', datos)
+
+    except Reserva.DoesNotExist:
+        datos = {'r2': f"El ID ({id}) No existe. Imposible editar!!"}
+        return render(request, 'operador-editar.html', datos)
+
 def eliminarReserva(request, id):
     try:
         res = Reserva.objects.get(id=id)
