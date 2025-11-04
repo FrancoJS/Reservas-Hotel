@@ -26,6 +26,14 @@
       color: #6c757d;
     }
   </style>
+  <script>
+    const botonEliminar = (id) => {
+      if (window.confirm("¿Está Seguro(a) De Querer Eliminar El Registro?")) {
+        window.location.href = "/eliminar-reserva/" + id + "/";
+      }
+    }
+  </script>
+
 </head>
 
 <body>
@@ -41,9 +49,9 @@
       <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="bi bi-journal-text me-1"></i> Listado de Reservas</h5>
         <div class="d-flex gap-2">
-          <a class="btn btn-primary btn-sm" href="reservas-crear.html"><i class="bi bi-plus-circle"></i> Nueva
+          <a class="btn btn-primary btn-sm" href="/mostrar_registrar/"><i class="bi bi-plus-circle"></i> Nueva
             reserva</a>
-          <a class="btn btn-outline-primary btn-sm" href="reservas-listado.html"><i class="bi bi-arrow-repeat"></i>
+          <a class="btn btn-outline-primary btn-sm" href="/operador-listado/"><i class="bi bi-arrow-repeat"></i>
             Refrescar</a>
         </div>
       </div>
@@ -86,24 +94,16 @@
                 <td>{{ l.monto }}</td>
                 <td class="text-end">
                   <a class="btn btn-sm btn-outline-primary" href="reservas-editar.html"><i class="bi bi-pencil"></i></a>
-                  <a class="btn btn-sm btn-outline-danger" href="reservas-eliminar.html"><i
-                      class="bi bi-trash3"></i></a>
+                
+                  <button type="button" onClick="botonEliminar({{ l.id }})" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash3"></i>
+                  </button>
                 </td>
               </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
-      </div>
-
-      <div class="card-footer small text-body-secondary d-flex justify-content-between">
-        <span>Total: 2 reservas</span>
-        <ul class="pagination pagination-sm mb-0">
-          <li class="page-item disabled"><a class="page-link">Anterior</a></li>
-          <li class="page-item active"><span class="page-link">1</span></li>
-          <li class="page-item"><a class="page-link">2</a></li>
-          <li class="page-item"><a class="page-link">Siguiente</a></li>
-        </ul>
       </div>
     </div>
   </main>
