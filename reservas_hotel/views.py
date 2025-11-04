@@ -109,6 +109,13 @@ def registrarReserva(request):
             nueva = Reserva(cliente_id=cli, habitacion_id=hab, fecha_reserva=fec, monto=mon)
             nueva.save()
 
+            descripcion = "Registrar Reserva"
+            tabla_afectada = "Reserva"
+            fecha = datetime.now()
+            usuario = request.session['id_usuario']
+            historial = Historial(usuario_id=usuario, descripcion=descripcion, tabla_afectada=tabla_afectada, fecha=fecha)
+            historial.save()
+
             opcionesClientes = Cliente.objects.all().order_by("nombre")
             opcionesHabitaciones = Habitacion.objects.all().order_by("tipo")
             datos = {
@@ -190,13 +197,8 @@ def mostrar_editar(request, id):
                     descripcion = "Editar Reserva"
                     tabla_afectada = "Reserva"
                     fecha = datetime.now()
-                    usuario_id = request.session['id_usuario']
-                    historial = Historial(
-                        usuario_id=usuario_id,
-                        descripcion=descripcion,
-                        tabla_afectada=tabla_afectada,
-                        fecha=fecha
-                    )
+                    usuario = request.session['id_usuario']
+                    historial = Historial(usuario_id=usuario, descripcion=descripcion, tabla_afectada=tabla_afectada, fecha=fecha)
                     historial.save()
 
                     datos = {
@@ -230,6 +232,13 @@ def eliminarReserva(request, id):
         referencia = f"{cliente} - {habitacion}"
 
         res.delete()
+
+        descripcion = "Eliminar Reserva"
+        tabla_afectada = "Reserva"
+        fecha = datetime.now()
+        usuario = request.session['id_usuario']
+        historial = Historial(usuario_id=usuario, descripcion=descripcion, tabla_afectada=tabla_afectada, fecha=fecha)
+        historial.save()
 
         reservas = Reserva.objects.select_related("cliente", "habitacion").order_by("fecha_reserva")
         datos = {
