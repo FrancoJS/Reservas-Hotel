@@ -13,6 +13,7 @@ urlpatterns = [
     path('mostrar_operador', views.mostrar_operador),
     path('operador-crear/', views.registrarReserva),
     path('operador-listado/', views.listarReserva),
+    path('operador-editar/<int:id>/', views.mostrar_editar),
     path('eliminar-reserva/<int:id>/', views.eliminarReserva),
 
 ]
